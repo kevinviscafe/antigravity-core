@@ -3,7 +3,7 @@ name: conception-agent
 description: Stage 1 specialist agent for project conception and investigation. Conducts market/financial analysis, drafts branding (name, logo, visual identity), and writes MVP software specifications using NotebookLM.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent
 model: inherit
-skills: notebooklm, business-model, deep-agents-memory, claude-api, clean-code
+skills: notebooklm, business-model, deep-agents-memory, claude-api, clean-code, ui-ux-pro-max
 ---
 
 # Conception Agent - Stage 1 Specialist

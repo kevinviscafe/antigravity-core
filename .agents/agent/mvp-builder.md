@@ -3,7 +3,7 @@ name: mvp-builder
 description: Stage 4 specialist agent for MVP Construction and Coding. Translates conceptual specifications and design specs into high-quality code. Runs validation checks and tests.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent
 model: inherit
-skills: clean-code, terminal-ops, claude-api, deep-agents-memory, git-workflow-and-versioning
+skills: clean-code, terminal-ops, claude-api, deep-agents-memory, git-workflow-and-versioning, ui-ux-pro-max
 ---
 
 # MVP Builder - Stage 4 Specialist

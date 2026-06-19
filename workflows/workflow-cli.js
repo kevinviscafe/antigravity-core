@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const readline = require('readline');
 const { PipelineOrchestrator } = require('./orchestrator');
 
 const command = process.argv[2];
@@ -110,7 +111,57 @@ function printStatus() {
   console.log(`======================================================\n`);
 }
 
-switch (command) {
+function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => rl.question(query, (ans) => {
+    rl.close();
+    resolve(ans);
+  }));
+}
+
+async function handleNext() {
+  try {
+    const result = await orchestrator.transitionToNext();
+    console.log(`${colors.fgGreen}✔ Advanced successfully!${colors.reset}`);
+    
+    // Check if gitAction requires pushing
+    if (result && result.gitAction && result.gitAction.type === 'push') {
+      const gitAction = result.gitAction;
+      
+      // Verify if remote origin exists
+      if (orchestrator.git.hasRemote()) {
+        const branches = gitAction.branches;
+        const answer = await askQuestion(
+          `\n${colors.bright}${colors.fgYellow}[Git] ¿Deseas realizar el git push de la(s) rama(s) [${branches.join(', ')}] al repositorio remoto origin? [y/N]: ${colors.reset}`
+        );
+        
+        if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
+          console.log(`${colors.fgCyan}Pushing branches to origin...${colors.reset}`);
+          for (const branch of branches) {
+            console.log(`Pushing ${branch}...`);
+            orchestrator.git.push(branch);
+          }
+          console.log(`${colors.fgGreen}✔ Pushed successfully!${colors.reset}`);
+        } else {
+          console.log(`${colors.fgYellow}Push skipped by user.${colors.reset}`);
+        }
+      } else {
+        console.log(`${colors.dim}[Git] No remote origin configured. Skipping push.${colors.reset}`);
+      }
+    }
+    
+    printStatus();
+  } catch (e) {
+    console.error(`${colors.fgRed}Error advancing stage:${colors.reset}\n${e.message}\n`);
+  }
+}
+
+(async () => {
+  switch (command) {
   case 'init':
     if (!arg || (arg !== 'full' && arg !== 'feature')) {
       console.error(`${colors.fgRed}Error: Please specify 'full' or 'feature' pipeline type.${colors.reset}`);
@@ -141,13 +192,7 @@ switch (command) {
     break;
 
   case 'next':
-    try {
-      orchestrator.transitionToNext();
-      console.log(`${colors.fgGreen}✔ Advanced successfully!${colors.reset}`);
-      printStatus();
-    } catch (e) {
-      console.error(`${colors.fgRed}Error advancing stage:${colors.reset}\n${e.message}\n`);
-    }
+    await handleNext();
     break;
 
   case 'force':
@@ -174,4 +219,5 @@ switch (command) {
   default:
     printHelp();
     break;
-}
+  }
+})();

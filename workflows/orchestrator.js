@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const GitHelper = require('./git-helper');
+
 const WORKSPACE_DIR = path.resolve(__dirname, '..');
 const PIPELINE_CONFIG_PATH = path.join(__dirname, 'pipeline.json');
 const STATE_PATH = path.join(__dirname, 'state.json');
@@ -33,6 +35,7 @@ class PipelineOrchestrator {
     if (!this.config) {
       throw new Error('Pipeline configuration file (pipeline.json) not found.');
     }
+    this.git = new GitHelper();
     this.loadState();
   }
 
@@ -227,6 +230,99 @@ class PipelineOrchestrator {
 
     const nextStage = flow[currentIdx + 1];
     const oldStage = this.state.current_stage;
+
+    // GIT TRANSITION LOGIC
+    let gitAction = null;
+    if (this.git.isRepo() || (oldStage === 'design' && nextStage === 'extraction')) {
+      try {
+        // 1. Initialize repo if it doesn't exist and we are advancing after design
+        if (oldStage === 'design' && nextStage === 'extraction') {
+          if (!this.git.isRepo()) {
+            console.log('Initializing new Git repository...');
+            this.git.initRepo();
+          }
+          // Determine branch name based on pipeline type
+          const branch = this.state.pipeline_type === 'full' ? 'feature/crm-mvp' : 'feature/crm-feature';
+          console.log(`Checking out branch: ${branch}`);
+          this.git.checkoutOrCreateBranch(branch, 'develop');
+          
+          this.git.stageAndCommit(`chore: initial crm feature workspace setup on ${branch}`);
+          
+          gitAction = {
+            type: 'push',
+            branches: [branch],
+            notes: 'Git repository initialized. Branches main, develop, and feature branch created.'
+          };
+        } 
+        // 2. Commit on features and merge on completion
+        else {
+          const currentBranch = this.git.getCurrentBranch();
+          
+          if (nextStage === 'completed') {
+            // Commit final MVP work on feature branch
+            this.git.stageAndCommit(`feat: complete ${this.state.pipeline_type} pipeline building phase`);
+            
+            console.log(`GitFlow consolidation: merging ${currentBranch} into develop and main...`);
+            // Switch to develop and merge feature branch
+            this.git.checkoutOrCreateBranch('develop');
+            this.git.merge(currentBranch, 'develop', `chore: consolidate feature branch ${currentBranch}`);
+            
+            // Create release branch from develop
+            const releaseBranch = `release/v1.0.0-beta`;
+            this.git.checkoutOrCreateBranch(releaseBranch, 'develop');
+            
+            // Merge release into main
+            this.git.checkoutOrCreateBranch('main');
+            this.git.merge(releaseBranch, 'main', `release: version v1.0.0-beta`);
+            
+            // Tag main
+            try {
+              this.git.exec('tag -a v1.0.0-beta -m "Release v1.0.0-beta"');
+            } catch (e) {
+              console.warn('Tag already exists or tag creation failed:', e.message);
+            }
+            
+            // Merge main back to develop
+            this.git.checkoutOrCreateBranch('develop');
+            this.git.merge('main', 'develop', `chore: merge release changes back to develop`);
+            
+            // Delete feature and release branches locally
+            try {
+              this.git.exec(`branch -d ${releaseBranch}`);
+              this.git.exec(`branch -d ${currentBranch}`);
+            } catch (e) {
+              console.warn('Failed to delete temporary branches locally:', e.message);
+            }
+            
+            gitAction = {
+              type: 'push',
+              branches: ['main', 'develop'],
+              notes: 'Consolidated branches merged. Release v1.0.0-beta tagged on main.'
+            };
+          } else {
+            // Intermediate stages: Commit deliverables
+            const commitMessage = `feat: complete stage ${oldStage} in ${this.state.pipeline_type} pipeline`;
+            const committed = this.git.stageAndCommit(commitMessage);
+            if (committed) {
+              console.log(`Committed changes to branch ${currentBranch}: "${commitMessage}"`);
+            }
+            
+            gitAction = {
+              type: 'push',
+              branches: [currentBranch],
+              notes: `Stage ${oldStage} committed to ${currentBranch}.`
+            };
+          }
+        }
+      } catch (gitError) {
+        console.error('Git integration warning (continuing transition):', gitError.message);
+        this.state.history.push({
+          action: 'git_error',
+          error: gitError.message,
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
     
     this.state.current_stage = nextStage;
     this.state.history.push({
@@ -237,7 +333,7 @@ class PipelineOrchestrator {
     });
 
     this.saveState();
-    return this.state;
+    return { state: this.state, gitAction };
   }
 }
 

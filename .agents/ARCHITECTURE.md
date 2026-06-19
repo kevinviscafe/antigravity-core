@@ -32,13 +32,13 @@ Custom AI personas mapped directly to the development lifecycle stages:
 | Agent | Target Stage | Core Focus | Skills Used |
 | :--- | :--- | :--- | :--- |
 | `orchestrator` | All Stages | Multi-agent coordination and pipeline transition supervisor. | workflow-orchestrator, deep-agents-memory |
-| `conception-agent` | Stage 1 | Conceptualization, market/financial analysis, visual identity, and software specification. | notebooklm, business-model, deep-agents-memory, claude-api, clean-code |
-| `stitch-designer` | Stage 2 & 3 | Layout design, component prototyping in Google Stitch, and specification/asset extraction. | stitch-loop, ui-designer, design-md, stitch-design-taste, grill-me, deep-agents-memory |
-| `mvp-builder` | Stage 4 | Translation of design specs and report requirements into clean, modular code. | clean-code, terminal-ops, claude-api, deep-agents-memory |
+| `conception-agent` | Stage 1 | Conceptualization, market/financial analysis, visual identity, and software specification. | notebooklm, business-model, deep-agents-memory, claude-api, clean-code, ui-ux-pro-max |
+| `stitch-designer` | Stage 2 & 3 | Layout design, component prototyping in Google Stitch, and specification/asset extraction. | stitch-loop, ui-designer, design-md, stitch-design-taste, grill-me, deep-agents-memory, ui-ux-pro-max |
+| `mvp-builder` | Stage 4 | Translation of design specs and report requirements into clean, modular code. | clean-code, terminal-ops, claude-api, deep-agents-memory, git-workflow-and-versioning, ui-ux-pro-max |
 
 ---
 
-## 🧩 Active Skills (14)
+## 🧩 Active Skills (15)
 
 Specialized capabilities and libraries installed in the workspace.
 
@@ -57,6 +57,7 @@ Specialized capabilities and libraries installed in the workspace.
 *   `design-md`: Exporter tool to compile design files and extract Stitch layout assets.
 *   `stitch-design-taste`: Aesthetic taste rules (glassmorphism, color harmony, visual depth).
 *   `grill-me`: Interactive discovery dialogs to align UX expectations.
+*   `ui-ux-pro-max`: Design intelligence for web and mobile (accessibility, typography, 161+ color palettes, best practices).
 
 ### Stage 4: Code & Verification
 *   `clean-code`: Clean coding practices, self-documenting code, avoiding over-engineering.
