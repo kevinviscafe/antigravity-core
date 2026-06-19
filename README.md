@@ -8,10 +8,11 @@ Este repositorio es una **Plantilla Maestra / Framework Orquestador de IA** 100%
 
 Dado que el framework no tiene dependencias de ejecución locales (como Node.js, CLI scripts o `package.json`), integrarlo en cualquier proyecto cliente es extremadamente sencillo:
 
-1. **Copiar la carpeta de agentes:** Copia la carpeta `.agents/` del repositorio de `antigravity-core` a la raíz de tu proyecto destino:
+1. **Clonar el repositorio de Antigravity:** Abre una terminal en la raíz de tu proyecto cliente y clona este repositorio directamente dentro de la carpeta `.agents/`:
    ```bash
-   cp -r /ruta/a/antigravity-core/.agents .
+   git clone https://github.com/kevinviscafe/antigravity-core.git .agents
    ```
+   *(Alternativamente, puedes agregarlo como un submódulo de Git para facilitar su actualización: `git submodule add https://github.com/kevinviscafe/antigravity-core.git .agents`)*
 2. **Iniciar:** Abre el proyecto cliente en la IDE de IA habilitada con soporte de agentes (como Cursor o VS Code con plugins compatibles). Las reglas se cargarán de manera automática.
 
 ---
