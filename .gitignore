@@ -1,0 +1,14 @@
+# Node dependencies
+node_modules/
+
+# Local stage-driven workflow state (should not be shared in repo)
+workflows/state.json
+
+# Local configurations and cache
+.claude/
+.DS_Store
+
+# Local environments and secrets
+.env
+.env.local
+.env.*.local
