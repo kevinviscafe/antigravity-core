@@ -2,18 +2,17 @@
 
 > **INSTRUCCIONES:** Copia este archivo a la raíz de tu proyecto cliente, renómbralo a `lock.md`, completa los campos y guarda los cambios. El motor de Antigravity detectará el archivo e iniciará automáticamente el flujo de desarrollo.
 
-Nombre del Proyecto: CRM Real Estate Premium
+Nombre del Proyecto: TaskFlow Manager
 
 Descripción de Funcionalidades para el MVP:
-1. **Gestión de Prospectos (Leads):**
-   - Registro rápido de leads con campos para nombre, correo, teléfono y presupuesto.
-   - Listado interactivo en formato bento grid para visualizar y filtrar leads por estado (Nuevo, En Proceso, Cerrado).
-2. **Catálogo de Propiedades:**
-   - Visualización de fichas de propiedades con fotos, precio, dirección y descripción del inmueble.
-   - Buscador rápido con filtros básicos por tipo (Casa, Departamento) y rango de precio.
-3. **Acciones Rápidas:**
-   - Botón directo en la ficha de cada lead para enviarle un mensaje predefinido por WhatsApp.
-4. **Dashboard de Analíticas:**
-   - Tarjetas minimalistas de estadísticas clave (total de leads capturados, tasa de conversión y propiedades más vistas).
+1. **Gestión de Tareas:**
+   - Crear nuevas tareas con un título, descripción corta y fecha de vencimiento.
+   - Marcar tareas como completadas mediante un checkbox interactivo.
+   - Eliminar tareas existentes de la lista.
+2. **Organización por Categorías:**
+   - Asignar una categoría o etiqueta a cada tarea (ej: Trabajo, Hogar, Compras).
+   - Filtrar el listado de tareas por categoría seleccionada o por estado (Todas, Pendientes, Completadas).
+3. **Sincronización en Tiempo Real:**
+   - Los cambios (crear, completar, eliminar) deben actualizarse en tiempo real en la pantalla.
 
-Stack Tecnológico: Next.js (React / TypeScript) + Tailwind CSS + Supabase (PostgreSQL)
+Stack Tecnológico: Angular (v17+ / TypeScript) + Firebase (Cloud Firestore & Authentication) + Vanilla CSS
