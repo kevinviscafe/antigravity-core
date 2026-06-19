@@ -1,77 +1,77 @@
-# Custom Agentic Workflow Architecture
+# Arquitectura del Workflow Agéntico - Antigravity Core
 
-> Stage-Driven Agent & Open Ecosystem Skills Core — 2026.6.19
-
----
-
-## 📋 Overview
-
-This repository has been configured with a stage-driven development workflow tailored for custom developments (such as CRM projects). It contains zero files from the original AG Kit except for configuration schemas. All core agents and skills have been replaced with specialized open-ecosystem integrations:
-
-- **4 Custom Specialist Agents** - Built to handle specific stages of the development cycle.
-- **14 Selected Skills** - Installed from the open ecosystem (`skills.sh`) to support planning, Stitch design, and MVP builds.
+> Arquitectura de IA Bifásica Libre de Código — 2026.6.19
 
 ---
 
-## 🏗️ Directory Structure
+## 📋 Resumen
+
+Este repositorio es una **Plantilla Maestra / Framework Orquestador Agéntico** desacoplado. A diferencia de las soluciones tradicionales basadas en scripts locales, este motor opera de manera **100% agéntica**, lo que significa que la máquina de estados, el watcher de archivos y las transiciones del ciclo de vida son ejecutadas por la propia IA que asiste en el espacio de trabajo.
+
+La arquitectura se divide en dos fases del ciclo de vida del desarrollo:
+1. **Fase MVP:** Creación conceptual con NotebookLM, prototipado visual en Google Stitch y desarrollo del MVP con control estricto de Git.
+2. **Fase de Desarrollo Continuo (Mantenimiento):** Flujo ágil enfocado en features, mejoras y bugs convencionales.
+
+---
+
+## 🏗️ Estructura del Directorio de Reglas
 
 ```plaintext
 .agents/
-├── ARCHITECTURE.md          # This file
-├── agent/                   # 4 Custom Specialist Agents
-├── skills/                  # 14 Open-Ecosystem Skills (core replaced)
-└── rules/                   # Global Rules (GEMINI.md behavior)
+├── ARCHITECTURE.md          # Este archivo de arquitectura
+├── agent/                   # 4 Agentes Especialistas (definiciones en markdown)
+│   ├── orchestrator.md      # Orquestador del estado y GitFlow
+│   ├── conception-agent.md  # Generación de reportes y especificaciones técnicas
+│   ├── stitch-designer.md   # Diseño visual y extracción en Stitch
+│   └── mvp-builder.md       # Codificación, compilación y verificación
+├── skills/                  # Instrucciones para la ejecución de herramientas MCP y CLI
+│   ├── notebooklm/          # Skill de NotebookLM
+│   ├── stitch-loop/         # Skill de Stitch
+│   ├── clean-code/          # Estándares de desarrollo limpio
+│   ├── terminal-ops/        # Ejecución y pruebas locales
+│   └── git-workflow/        # Flujos profesionales de Git
+└── rules/                   # Reglas globales (GEMINI.md)
 ```
 
 ---
 
-## 🤖 Custom Stage Agents
+## 🤖 Roles y Responsabilidades de los Agentes
 
-Custom AI personas mapped directly to the development lifecycle stages:
-
-| Agent | Target Stage | Core Focus | Skills Used |
+| Agente | Fases Activas | Foco Principal | Habilidades Principales |
 | :--- | :--- | :--- | :--- |
-| `orchestrator` | All Stages | Multi-agent coordination and pipeline transition supervisor. | workflow-orchestrator, deep-agents-memory |
-| `conception-agent` | Stage 1 | Conceptualization, market/financial analysis, visual identity, and software specification. | notebooklm, business-model, deep-agents-memory, claude-api, clean-code, ui-ux-pro-max |
-| `stitch-designer` | Stage 2 & 3 | Layout design, component prototyping in Google Stitch, and specification/asset extraction. | stitch-loop, ui-designer, design-md, stitch-design-taste, grill-me, deep-agents-memory, ui-ux-pro-max |
-| `mvp-builder` | Stage 4 | Translation of design specs and report requirements into clean, modular code. | clean-code, terminal-ops, claude-api, deep-agents-memory, git-workflow-and-versioning, ui-ux-pro-max |
+| `orchestrator` | Todas | Supervisor del estado reactivo, transiciones HITL y GitFlow. | `git-workflow`, `deep-agents-memory` |
+| `conception-agent` | MVP & Continuo | Redacción de informes de arquitectura y análisis técnico de requerimientos. | `notebooklm`, `business-model` |
+| `stitch-designer` | MVP | Maquetación visual e interactiva en Stitch y compilación de especificaciones de diseño. | `stitch-loop`, `ui-designer`, `design-md` |
+| `mvp-builder` | MVP & Continuo | Escritura de código limpio, pruebas locales, depuración y verificación en terminal. | `clean-code`, `terminal-ops` |
 
 ---
 
-## 🧩 Active Skills (15)
+## 🔄 Flujo de Control por Archivo y Aprobaciones (HITL)
 
-Specialized capabilities and libraries installed in the workspace.
+El ciclo de vida se gestiona de manera declarativa usando dos archivos en el proyecto cliente:
+1. **`.antigravity/state.json`:** Mantiene el estado interno de la máquina de estados y metadatos extraídos de `lock.md`/`feature.md`.
+2. **`.antigravity/approvals.md`:** Checkbox interactivo en formato markdown. El desarrollador aprueba un checkpoint editando el archivo (cambiando `[ ]` por `[x]`).
 
-### Core Orchestration & Memory
-*   `workflow-orchestrator`: Advanced orchestration guidelines and task delegation.
-*   `deep-agents-memory`: Persistent state management and context recall engines.
-*   `find-skills`: CLI helper tool to search for new skills.
+### Mapeo de Transiciones Git y Checkpoints:
 
-### Stage 1: Conception & Planning
-*   `notebooklm`: Interface tools for Google NotebookLM.
-*   `business-model`: Competitor benchmarking, market analysis, and monetization structures.
-
-### Stage 2 & 3: UI/UX Design & Extraction (Google Stitch)
-*   `stitch-loop`: Multi-turn design loop manager for Google Stitch.
-*   `ui-designer`: Comprehensive layouts, margins, typography, and web design guidelines.
-*   `design-md`: Exporter tool to compile design files and extract Stitch layout assets.
-*   `stitch-design-taste`: Aesthetic taste rules (glassmorphism, color harmony, visual depth).
-*   `grill-me`: Interactive discovery dialogs to align UX expectations.
-*   `ui-ux-pro-max`: Design intelligence for web and mobile (accessibility, typography, 161+ color palettes, best practices).
-
-### Stage 4: Code & Verification
-*   `clean-code`: Clean coding practices, self-documenting code, avoiding over-engineering.
-*   `terminal-ops`: Shell execution engines, command running, and diagnostics.
-*   `claude-api`: Reference library for prompt construction, caching, and model specifications.
-*   `git-workflow-and-versioning`: Structures git commit discipline, trunk-based development, and worktree separation.
+```mermaid
+graph TD
+    A[Inicio: lock.md] -->|Genera Reporte| B(INVESTIGATION)
+    B -->|Usuario marca checkpoint_1| C(DESIGN)
+    C -->|Git Init, Checkout feature/crm-mvp, Git Push| D[Entorno Stitch]
+    D -->|Usuario marca checkpoint_2| E(DEVELOPMENT)
+    E -->|Modificaciones de código + Commits/Pushes incrementales| F[Bucle de Codificación]
+    F -->|Verificación: npm test / build exitoso| G(RELEASE BETA)
+    G -->|Usuario marca checkpoint_3| H(DELIVERY)
+    H -->|Merge develop, Tag release, Push main y tags| I[COMPLETED: Cambio a CONTINUOUS]
+```
 
 ---
 
-## 📊 Statistics
+## 🚦 Flujo Git en Desarrollo Continuo (Fase B)
 
-| Metric | Value |
-| :--- | :--- |
-| **Total Agents** | 4 |
-| **Total Skills** | 15 |
-| **Total Workflows** | 0 (Slash commands replaced by custom scripts) |
-| **Workflow Engine** | State-driven pipeline with 3 human checkpoints |
+Una vez en mantenimiento (`CONTINUOUS`):
+1. **Detección:** El desarrollador crea `feature.md`. El orquestador extrae el alcance y crea `.antigravity/temp_spec.md`.
+2. **Checkout de Rama:** Al aprobarse la spec (`approve_spec`), el agente crea la rama `feature/nombre-feature` desde `develop` y hace push a origen.
+3. **Desarrollo:** El desarrollador y el agente programador trabajan sobre esta rama con commits y pushes continuos.
+4. **Fusión:** Tras el build exitoso y aprobación final (`approve_code`), se realiza merge local a `develop`, push a origen de la rama `develop`, y se deja lista en GitHub para Pull Request.

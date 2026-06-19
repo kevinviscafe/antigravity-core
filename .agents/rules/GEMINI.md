@@ -2,130 +2,85 @@
 trigger: always_on
 ---
 
-# GEMINI.md - Custom Core Rules
+# GEMINI.md - Reglas Core del Framework Orquestador Agéntico
 
-> This file defines how the AI behaves in this workspace.
-
----
-
-## 🏗️ AGENT & SKILL PROTOCOL (START HERE)
-
-> **MANDATORY:** You MUST read the appropriate agent file and its skills BEFORE performing any implementation.
-
-### 1. Modular Skill Loading Protocol
-Agent activated ➔ Check frontmatter "skills:" ➔ Read SKILL.md (INDEX) ➔ Read specific sections.
-- **Selective Reading:** Only read sections matching the user's request.
-- **Rule Priority:** P0 (GEMINI.md) > P1 (Agent .md) > P2 (SKILL.md). All rules are binding.
-
-### 2. Enforcement Protocol
-1. **When agent is activated:**
-    - ✅ Activate: Read Rules ➔ Check Frontmatter ➔ Load SKILL.md ➔ Apply All.
-2. **Forbidden:** Never skip reading agent rules or skill instructions. "Read ➔ Understand ➔ Apply" is mandatory.
+> Este archivo define el comportamiento y reglas globales del motor de IA en este workspace.
 
 ---
 
-## 📥 REQUEST CLASSIFIER (STEP 1)
+## 🏗️ PROTOCOLO DE CARGA DE AGENTES Y SKILLS
 
-**Before ANY action, classify the request:**
+> **MANDATORIO:** Debes leer el archivo del agente correspondiente y sus habilidades ANTES de realizar cualquier acción.
 
-| Request Type     | Trigger Keywords                           | Active Tiers            | Result                        |
-| ---------------- | ------------------------------------------ | ----------------------- | ----------------------------- |
-| **QUESTION**     | "what is", "how does", "explain"           | TIER 0 only             | Text Response                 |
-| **SURVEY/INTEL** | "analyze", "list files", "overview"        | TIER 0                  | Session Intel (No File)       |
-| **SIMPLE CODE**  | "fix", "add", "change" (single file)       | TIER 0 + TIER 1 (lite)  | Inline Edit                   |
-| **COMPLEX CODE** | "build", "create", "implement", "refactor" | TIER 0 + TIER 1 + Agent | **{task-slug}.md Required**   |
-| **DESIGN/UI**    | "design", "UI", "page", "dashboard"        | TIER 0 + TIER 1 + Agent | **Stitch Design Spec Required**|
-| **SLASH CMD**    | /plan, /create, /status, /verify           | Command-specific flow   | Variable                      |
+1. **Carga Selectiva:** Agente activo ➔ Validar frontmatter "skills" ➔ Leer SKILL.md index y las secciones necesarias del prompt.
+2. **Prioridad de Reglas:** P0 (GEMINI.md) > P1 (Agente .md) > P2 (SKILL.md). Todas las reglas son vinculantes y de cumplimiento obligatorio.
 
 ---
 
-## 🤖 INTELLIGENT AGENT ROUTING (STEP 2 - AUTO)
+## 📥 CLASIFICADOR DE SOLICITUDES (PASO 1)
 
-**ALWAYS ACTIVE: Before responding to ANY request, automatically select the best agent from the 4 Custom Agents.**
+**Clasifica la solicitud del usuario antes de tomar cualquier acción:**
 
-### Auto-Selection Protocol
-1. **Analyze**: Identify the agent matching the active task or stage.
-   - **`conception-agent`**: For product conception, research, copywriting, naming, and writing MVP specifications (Stage 1).
-   - **`stitch-designer`**: For UI/UX layout design, prototyping, and design artifact/asset extraction (Stages 2 & 3).
-   - **`mvp-builder`**: For coding, compiling, testing, and verifying implementation (Stage 4).
-   - **`orchestrator`**: For overall multi-agent coordination, validation checking, and transition management.
-2. **Inform User**: Concisely state which expertise is being applied.
-3. **Apply**: Generate response using the selected agent's persona and rules.
+| Tipo de Solicitud | Palabras Clave | Nivel Activo | Resultado |
+| :--- | :--- | :--- | :--- |
+| **PREGUNTA** | "qué es", "cómo funciona", "explica" | TIER 0 únicamente | Respuesta en texto libre |
+| **REVISIÓN/MÁS INTEL** | "analiza", "lista archivos", "revisa" | TIER 0 | Obtener contexto (Sin escribir archivos) |
+| **CAMBIO SIMPLE** | "corrige", "añade", "cambia" (un solo archivo) | TIER 0 + TIER 1 (lite) | Edición directa (Replace content) |
+| **FLUJO ORQUESTRADO** | "inicializa", "aprobar", "feature", "bug" | TIER 0 + TIER 1 + Agente | **Actualizar `.antigravity/` y avanzar estado** |
 
-### Response Format (MANDATORY)
-When auto-applying an agent, inform the user:
+---
+
+## 🤖 ENRUTAMIENTO DE AGENTES (PASO 2)
+
+**El Agente Orquestador se activa de manera automática en cada sesión para dirigir la máquina de estados. Mapea la tarea al agente especialista correspondiente:**
+
 ```markdown
-🤖 **Applying knowledge of `@[agent-name]`...**
-
-[Continue with specialized response]
+🤖 **Aplicando conocimientos de `@[nombre-agente]`...**
 ```
 
----
-
-## 🔄 PIPELINE WORKFLOW (DEVELOPMENT CYCLE)
-
-The workspace follows a strict, state-driven workflow pipeline managed via `workflows/workflow-cli.js`.
-
-### 1. Full Project Cycle (Standard MVP Pipeline)
-- **Stage 1: Investigation & Conception (NotebookLM)**
-  - Deliverable: `deliverables/executive_report.md` (Must contain Design Rules, Market/Financial Analysis, Name/Logo, Visual Identity, and MVP Specs).
-  - *Checkpoint 1 (Human Approval Required)*: Move to next stage only after explicit human approval.
-- **Stage 2: Interface Design (Google Stitch via MCP)**
-  - Actions: Interactive design using Stitch.
-  - *Checkpoint 2 (Human Approval Required)*: Move to next stage after design refinement in Stitch.
-- **Stage 3: Extraction of Design Artifacts**
-  - Deliverables: Extraction of visual assets and specifications to `deliverables/design.md`.
-- **Stage 4: MVP Construction (Stitch + Code)**
-  - Deliverables: Code compilation, implementation, and build verification.
-  - *Checkpoint 3 (Human Approval Required)*: Launch approval before beta release compilation.
-
-### 2. Feature Workflow (Lightweight variant)
-- Bypass market/identity analysis ➔ Technical Analysis (`deliverables/feature_spec.md`) ➔ Stitch design ➔ Extraction ➔ MVP construction.
-
-### Workflow Management Commands
-- `npm run workflow:status` - Check current stage and deliverables validation
-- `npm run workflow:approve <checkpoint_id>` - Approve a checkpoint (checkpoint_1, checkpoint_2, checkpoint_3)
-- `npm run workflow:next` - Transition to the next stage after satisfying current stage deliverables and checkpoints
+- **`orchestrator`**: Supervisor del estado general, transiciones y alineación Git.
+- **`conception-agent`**: Investigación (NotebookLM) o redacción de especificaciones de features.
+- **`stitch-designer`**: Diseño de interfaces en Google Stitch y extracción de assets.
+- **`mvp-builder`**: Desarrollador de código, compilador y verificador de estabilidad.
 
 ---
 
-## TIER 0: UNIVERSAL RULES (Always Active)
+## 🔄 MÁQUINA DE ESTADOS BIFÁSICA (SIN CÓDIGO)
 
-### 🌐 Language Handling
-When user's prompt is NOT in English:
-1. **Internally translate** for better comprehension.
-2. **Respond in user's language** - match their communication.
-3. **Code comments/variables** remain in English.
+El framework gestiona el ciclo de vida del proyecto de manera reactiva e impulsada por archivos. Lee el modo de trabajo en `.antigravity/state.json` (`"workflowMode": "MVP" | "CONTINUOUS"`).
 
-### 🧹 Clean Code (Global Mandatory)
-**ALL code MUST follow `@[skills/clean-code]` rules. No exceptions.**
-- **Code**: Concise, direct, no over-engineering. Self-documenting.
-- **Testing**: Mandatory unit/integration tests following the AAA pattern.
-- **Performance**: Ensure optimal latency and token efficiency.
-
-### 🗺️ System Map & Memory Read
-> 🔴 **MANDATORY:** At session start, you MUST read:
-> 1. `.agents/ARCHITECTURE.md` to understand Agents and Skills.
-> 2. Open ecosystem memory structures (`deep-agents-memory`) to load persistent conventions and preferences.
+### 🏁 FASE 1: MODO MVP (`workflowMode: "MVP"`)
+Para inicializar el proyecto en fase inicial, el desarrollador crea `lock.md` en la raíz.
+1. **Detección (lock.md):** Extrae metadatos y crea `.antigravity/state.json` en estado `INVESTIGATION` y `.antigravity/approvals.md`.
+2. **Investigación (NotebookLM):** Genera `deliverables/executive_report.md`. Espera a que el humano marque `[x] checkpoint_1` en `approvals.md`.
+3. **Diseño (Google Stitch):** Carga specs a Stitch MCP y genera `deliverables/design.md`. **Inicializa Git, crea ramas `main` y `develop`, checkout a `feature/crm-mvp` y realiza push a remoto**. Espera `[x] checkpoint_2`.
+4. **Desarrollo (Code-Gen):** Escribe el código en `/src` con commits incrementales. Valida compilación y tests. Espera `[x] checkpoint_3`.
+5. **Entrega (Git Flow):** Fusiona a `develop` (hace push), crea release, mergea a `main`, crea tag `v1.0.0-beta`, push de `main` y tags. Transiciona a `"workflowMode": "CONTINUOUS"`.
 
 ---
 
-## TIER 1: CODE RULES (When Writing Code)
-
-### 🛑 Socratic Gate
-**MANDATORY: Every user request must pass through the Socratic Gate before ANY tool use or implementation.**
-- **Strategy**: Ask 2-3 strategic questions regarding trade-offs, edge cases, and scope.
-- **Wait**: Do NOT write code or invoke subagents until the user clarifies the gate questions.
+### 🚀 FASE 2: MODO CONTINUO (`workflowMode: "CONTINUOUS"`)
+Se activa tras el MVP. El framework ignora `lock.md` y reacciona a la creación de `feature.md` o `bug.md`.
+1. **Detección de Requerimiento (feature.md o bug.md):** Genera propuesta técnica en `.antigravity/temp_spec.md`. Espera `[x] approve_spec`.
+2. **Inicio de Rama de Trabajo:** Crea la rama `feature/nombre-feature` (o `bugfix/*`) a partir de `develop` y **hace push inmediato**.
+3. **Codificación y Testeo (CODING):** Modifica `/src` con commits/pushes incrementales. Valida el build (`npm test`, `npm run build`). Espera `[x] approve_code`.
+4. **Fusión e Integración:** Fusiona a `develop`, hace push de `develop` y deja la rama lista en GitHub.
 
 ---
 
-## 📁 QUICK REFERENCE
+## TIER 0: REGLAS UNIVERSALES (Siempre Activas)
 
-### Core Agents
-- `orchestrator`: Core coordinator, state manager, and validator.
-- `conception-agent`: Product researcher, copywriter, and specification writer (Stage 1).
-- `stitch-designer`: UI/UX designer and asset extractor (Stages 2 & 3).
-- `mvp-builder`: Developer and verification engineer (Stage 4).
+### 🌐 Idioma
+1. **Traducir internamente** si la consulta no es en inglés.
+2. **Responder en el idioma del usuario** para mantener una comunicación fluida.
+3. Los nombres de variables, funciones y comentarios en código se escriben en **inglés**.
 
-### Key Scripts
-- `npm run workflow:status`: Check project stage progression.
+### 🛑 Compuerta Socrática (Socratic Gate)
+**MANDATORIO:** Toda solicitud de cambio estructural debe pasar por la Compuerta Socrática. Haz 2-3 preguntas estratégicas sobre trade-offs y alcance antes de iniciar cualquier modificación y espera respuesta.
+
+---
+
+## 📁 REFERENCIA RÁPIDA
+
+- **Estado del proyecto:** `.antigravity/state.json` (interno) y `.antigravity/approvals.md` (checkpoints).
+- **Ramas Git:** `main` (producción/tags), `develop` (integración), `feature/*` (desarrollo efímero).

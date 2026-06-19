@@ -1,68 +1,59 @@
-# AG Kit Core — Master Template
+# Antigravity Core — Framework Orquestador Agéntico Bifásico
 
-This repository is a customized and pruned core master template designed to automate development pipelines using specialized AI agents, custom workflows, and human-in-the-loop checkpoint approvals. It serves as the base for constructing specific applications (like our CRM).
-
----
-
-## ⚡ Quick Start: Workflow CLI
-
-The development lifecycle is automated and enforced through a state-driven manager. You can interact with the workflow using the following npm commands:
-
-### 1. Initialize a Pipeline
-Initialize either a full cycle or a light feature cycle:
-```bash
-# Full Project Cycle (Conceptualization ➔ Design ➔ Extraction ➔ Build)
-npm run workflow:init full
-
-# Feature Lifecycle (Technical Analysis ➔ Design ➔ Extraction ➔ Build)
-npm run workflow:init feature
-```
-
-### 2. View Stage Status and Deliverables Validation
-Displays the active stage, verification of required files/headers, and checkpoints status:
-```bash
-npm run workflow:status
-```
-
-### 3. Approve a Checkpoint
-Approves a pending checkpoint to allow transitioning (e.g., after human design review):
-```bash
-npm run workflow:approve checkpoint_1
-```
-
-### 4. Transition to the Next Stage
-Validates deliverables and approvals of the current stage, and advances the workflow:
-```bash
-npm run workflow:next
-```
-
-### 5. Force Stage Transition (Bypass)
-Forcefully sets the stage to skip deliverables check (useful for debugging):
-```bash
-npm run workflow:force <stage_name>
-```
+Este repositorio es una **Plantilla Maestra / Framework Orquestador de IA** 100% agéntico, declarativo y libre de código compilado tradicional. La máquina de estados, el flujo de desarrollo y las operaciones profesionales de GitFlow son ejecutados directamente por la Inteligencia Artificial de la IDE, reaccionando a la creación y modificación de archivos en el espacio de trabajo del usuario.
 
 ---
 
-## 🏗️ Folder Structure
+## ⚡ Instalación y Configuración en un Proyecto Cliente
 
-*   `workflows/`: Static pipeline schemas (`pipeline.json`), orchestrator transition logic (`orchestrator.js`), and user CLI (`workflow-cli.js`).
-*   `templates/`: Guides for stage deliverables (`executive_report_template.md`, `design_spec_template.md`, `feature_spec_template.md`).
-*   `.agents/`: AI agents rules and specialized skills.
-    *   `agent/`: Custom stage-based AI profiles (`conception-agent`, `stitch-designer`, `mvp-builder`, `orchestrator`, `explorer-agent`).
-    *   `skills/`: Reusable capability libraries (e.g., `stitch-loop`, `notebooklm`, `business-model`, `design-md`).
-    *   `rules/`: Behavior guidelines (`GEMINI.md`).
+Dado que el framework no tiene dependencias de ejecución locales (como Node.js, CLI scripts o `package.json`), integrarlo en cualquier proyecto cliente es extremadamente sencillo:
+
+1. **Copiar la carpeta de agentes:** Copia la carpeta `.agents/` del repositorio de `antigravity-core` a la raíz de tu proyecto destino:
+   ```bash
+   cp -r /ruta/a/antigravity-core/.agents .
+   ```
+2. **Iniciar:** Abre el proyecto cliente en la IDE de IA habilitada con soporte de agentes (como Cursor o VS Code con plugins compatibles). Las reglas se cargarán de manera automática.
 
 ---
 
-## 🤖 Custom Stage Agents
+## 🔄 El Ciclo de Vida del Software: Dos Fases Activas
 
-AI agent profiles are customized and routed dynamically by the `orchestrator` based on the active stage:
+El framework opera en dos fases de desarrollo distintas según el archivo de estado `.antigravity/state.json` (`workflowMode`):
 
-| Active Stage | Responsibility | Agent Profile | Assigned Skills |
-| :--- | :--- | :--- | :--- |
-| **INVESTIGATION** | Conception and MVP Spec Planning | `conception-agent` | `notebooklm`, `business-model` |
-| **TECHNICAL_ANALYSIS** | Light Feature Specs | `conception-agent` | `api-patterns` |
-| **DESIGN** | UI Prototyping in Google Stitch | `stitch-designer` | `stitch-loop`, `ui-designer`, `grill-me`, `stitch-design-taste` |
-| **EXTRACTION** | Spec Exporter (design.md & assets) | `stitch-designer` | `design-md` |
-| **CONSTRUCTION** | Modular Coding and Compilation | `mvp-builder` | `clean-code`, `verify-changes`, `bash-linux`, `powershell-windows` |
+### 🏁 Fase A: Modo MVP (Ciclo Inicial Completo)
+1. **Inicialización:** Crea un archivo `lock.md` en la raíz de tu proyecto:
+   ```markdown
+   Nombre del Proyecto: Mi App
+   Descripción de Funcionalidades para el MVP:
+   - Funcionalidad X
+   - Funcionalidad Y
+   Stack Tecnológico: React + Tailwind
+   ```
+2. **Generación del Reporte:** El agente de IA creará el archivo `.antigravity/state.json`, `.antigravity/approvals.md` y redactará el informe en `deliverables/executive_report.md`.
+3. **Compuertas Human-in-the-Loop (HITL):** El flujo se pausará solicitando tu aprobación en el archivo `.antigravity/approvals.md`. Abre el archivo en tu editor, marca con una `x` la compuerta correspondiente y guarda:
+   - `- [x] **checkpoint_1**: Aprobar Informe Técnico...`
+4. **Diseño y Git Inicial:** El agente Stitch generará los mockups. Al extraerlos en `deliverables/design.md` y `deliverables/assets/`, **el orquestador inicializará Git localmente, creará las ramas `main` y `develop`, checkout a `feature/crm-mvp` y hará push inmediato al repositorio de GitHub**.
+5. **Codificación:** El desarrollador programará en `/src` haciendo commits y pushes incrementales automáticos.
+6. **Entrega del MVP:** Al marcar `checkpoint_3` en approvals.md, el orquestador fusionará la feature a `develop`, creará la rama de release, mergeará a `main`, la etiquetará con el tag `v1.0.0-beta`, hará push de todo a origen y cambiará el modo de trabajo a `CONTINUOUS`.
+
+---
+
+### 🚀 Fase B: Modo Continuo (Evolución, Características y Bugs)
+Una vez entregado el MVP, el orquestador pasa a desarrollo continuo (ignora `lock.md`):
+
+1. **Nuevo Requerimiento:** Crea un archivo `feature.md` (o `feature-nombre.md`) para nuevas funcionalidades, o `bug.md` (o `bug-nombre.md`) para reportar un error.
+2. **Propuesta Técnica:** El agente genera un análisis técnico rápido en `.antigravity/temp_spec.md` con los archivos a modificar. Aprueba cambiando la casilla en `.antigravity/approvals.md`:
+   - `[x] **approve_spec**: Aprobar análisis técnico...`
+3. **Inicio de Rama de Trabajo:** El agente crea de inmediato una rama efímera local (`feature/*` o `bugfix/*`) a partir de `develop` y **hace push a origen**.
+4. **Desarrollo y Testeo:** El programador modifica el código en `/src` con commits/pushes granulares y ejecuta las compilaciones/tests locales del proyecto. Al finalizar con éxito, solicita aprobación:
+   - `[x] **approve_code**: Aprobar cambios de código y autorizar integración...`
+5. **Integración:** El agente realiza el merge local a `develop`, sube `develop` a GitHub y deja lista la integración para Pull Request.
+
+---
+
+## 📁 Estructura del Framework
+
+*   `.agents/`: Configuración y lógica de los agentes de IA.
+    *   `agent/`: Personas Markdown (`orchestrator.md`, `conception-agent.md`, `stitch-designer.md`, `mvp-builder.md`).
+    *   `skills/`: Directrices detalladas para la ejecución de herramientas MCP (Stitch, NotebookLM) y desarrollo limpio.
+    *   `rules/`: Reglas globales (`GEMINI.md`).
