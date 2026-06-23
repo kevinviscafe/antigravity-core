@@ -19,6 +19,11 @@ Dado que el framework no tiene dependencias de ejecución locales (como Node.js,
    ```powershell
    git clone https://github.com/kevinviscafe/antigravity-core.git temp_antigravity; Move-Item temp_antigravity/.agents .agents; Remove-Item -Recurse -Force temp_antigravity
    ```
+
+   **Mediante un Agente de IA (Prompt):**
+   Si prefieres que el agente de tu IDE realice la instalación, cópiale este prompt:
+   > "Clona `https://github.com/kevinviscafe/antigravity-core.git` en una carpeta temporal y mueve su carpeta interna `.agents/` directamente a la raíz de mi proyecto. Asegúrate de que la ruta final sea `.agents/agent/` y no esté duplicada (evita `.agents/.agents/`). Borra la carpeta temporal al terminar."
+
 2. **Iniciar:** Abre el proyecto cliente en la IDE de IA habilitada con soporte de agentes (como Cursor o VS Code con plugins compatibles). Las reglas se cargarán de manera automática.
 
 ---
