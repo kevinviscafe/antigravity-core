@@ -28,6 +28,20 @@ Dado que el framework no tiene dependencias de ejecución locales (como Node.js,
 
 ---
 
+## 🔌 Configuración de Servidores MCP (Requisito Obligatorio)
+
+Para que los agentes puedan realizar el diseño automatizado y la investigación profunda, debes tener configurados los siguientes dos servidores MCP en tu IDE:
+
+### 1. Stitch MCP (Diseño de Interfaces)
+* **Instalación:** Búscalo e instálalo directamente desde la biblioteca oficial de MCPs de tu IDE (Manage MCP Servers).
+* **Configuración:** Solo requiere ingresar tu token de API de Stitch.
+
+### 2. NotebookLM MCP (Investigación y Reportes)
+Para instalar y conectar NotebookLM automáticamente a tu IDE vía MCP, cópiale este prompt a tu agente:
+> "Conecta NotebookLM vía MCP a mi IDE. Pasos: 1) Instala `notebooklm-mcp-server` usando `uv` (o `pip`). 2) Localiza y edita la configuración MCP activa en mi IDE para registrar el servidor. 3) Ejecuta `notebooklm-mcp-auth` para abrir la autenticación en navegador y guíame. 4) Verifica listando mis notebooks. Pídeme confirmación antes de cambios sensibles."
+
+---
+
 ## 🔄 El Ciclo de Vida del Software: Dos Fases Activas
 
 El framework opera en dos fases de desarrollo distintas según el archivo de estado `.antigravity/state.json` (`workflowMode`):
