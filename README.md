@@ -25,6 +25,8 @@ El framework opera en dos fases de desarrollo distintas según el archivo de est
 1. **Inicialización:** Crea un archivo `lock.md` en la raíz de tu proyecto:
    ```markdown
    Nombre del Proyecto: Mi App
+   Descripción General del Proyecto:
+   - Visión, propuesta de valor y propósito de la aplicación.
    Descripción de Funcionalidades para el MVP:
    - Funcionalidad X
    - Funcionalidad Y
